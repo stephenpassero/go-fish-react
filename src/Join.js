@@ -19,9 +19,7 @@ class Join extends React.Component {
       body: JSON.stringify({
         name: this.state.value
       })
-    }).then(function(response) {
-    console.log(response.json());
-  })
+    }).then(response => this.props.updateState("Game"))
     event.preventDefault();
   }
 
@@ -29,9 +27,9 @@ class Join extends React.Component {
     return (
       <div className='wrapper'>
         <h1> Welcome to Go Fish!</h1>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           <h3> Type in your name:</h3>
-          <input name="name" type="text" required="" value={this.state.value} onChange={this.handleChange}/>
+          <input name="name" type="text" required="" value={this.state.value} onChange={this.handleChange.bind(this)}/>
           <input type='submit' value='Submit'/>
         </form>
       </div>

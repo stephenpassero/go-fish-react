@@ -1,15 +1,33 @@
 import React, { Component } from 'react';
 import './App.css';
 import Join from './Join.js'
+import Game from './Game.js'
 
 class App extends Component {
+
+  constructor(){
+    super()
+    this.state = {componentToRender: "Join"}
+  }
+
+  updateState(str){
+    this.setState({componentToRender: str})
+  }
+
   render() {
-    return (
-      // When state switches render Game instead of Join
-      <div>
-        // <Join updateState={(str) => this.updateState.bind(this)}/>
-      </div>
-    );
+    if (this.state.componentToRender === "Join"){
+      return (
+        <div>
+          <Join updateState={this.updateState.bind(this)}/>
+        </div>
+      );
+    }else if (this.state.componentToRender === "Game") {
+      return (
+        <div>
+          <Game/>
+        </div>
+      );
+    }
   }
 }
 

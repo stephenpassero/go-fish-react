@@ -12,13 +12,13 @@ class Game extends React.Component {
     }
   }
 
-  componentDidMount(){
-    fetch('/game', {
-      method: 'get'
-    }).then(data => data.json()).then((data) => {
-
-    }
-  }
+  // componentDidMount(){
+  //   fetch('/game', {
+  //     method: 'get'
+  //   }).then(data => data.json()).then((data) => {
+  //
+  //   }
+  // }
 
   render() {
     return (
