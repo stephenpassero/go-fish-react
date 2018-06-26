@@ -5,6 +5,7 @@ import Join from './Join';
 import registerServiceWorker from './registerServiceWorker';
 
 
+
 // if(game){
 //   ReactDOM.render(<Game />, document.getElementById('root'));
 // }else{

@@ -1,21 +1,16 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pry'
-require './lib/game'
 require 'json'
-
-@@game = Game.new()
-@@players = []
-@@names = []
-@@responses = []
+require 'sinatra/json'
 
 class Server < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
 
-  post('/') do
-    push = JSON.parse(request.body.read)
-    binding.pry
+  post('/join') do
+    json_obj = JSON.parse(request.body.read)
+    json json_obj
   end
 end

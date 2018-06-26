@@ -14,14 +14,17 @@ class Join extends React.Component {
   }
 
   handleSubmit(event) {
-    fetch('/', {
-      method: 'POST',
+    fetch('/join', {
+      method: 'post',
       body: JSON.stringify({
         name: this.state.value
       })
-    })
+    }).then(function(response) {
+    console.log(response.json());
+  })
     event.preventDefault();
   }
+
   render() {
     return (
       <div className='wrapper'>
