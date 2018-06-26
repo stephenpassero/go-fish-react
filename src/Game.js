@@ -5,27 +5,31 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPlayer: {
-        hand: []
-      },
-      opponents: []
+      players: ""
     }
   }
 
-  // componentDidMount(){
-  //   fetch('/game', {
-  //     method: 'get'
-  //   }).then(data => data.json()).then((data) => {
-  //
-  //   }
-  // }
+  componentDidMount(){
+    fetch('/game', {
+      method: 'GET'
+    }).then(data => data.json()).then((data) => {
+      this.setState({players: data['players']})
+    })
+  }
 
   render() {
-    return (
-      <div>
-        <h1>Hello</h1>
-      </div>
-    );
+    if(this.state.players.length > 0){
+      return (
+        <div>
+          <h1>{this.state.players[0]}</h1>
+        </div>
+      );
+    }else {
+      return (
+        <div>
+        </div>
+      );
+    }
   }
 }
 

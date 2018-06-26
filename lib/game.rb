@@ -11,6 +11,11 @@ class Game
     @player_turn = 1
     @deck = CardDeck.new()
     @deck.shuffle!
+    @names = []
+  end
+
+  def names()
+    @names
   end
 
   def deal_cards()
@@ -19,6 +24,10 @@ class Game
         player.add_to_hand([deck.play_top_card])
       end
     end
+  end
+
+  def cards()
+    @deck.cards
   end
 
   def set_cards(arr_of_cards=[])
@@ -66,6 +75,7 @@ class Game
   def create_new_player(player_name)
     player = Player.new(player_name)
     players[player_name.downcase] = player
+    names.push(player_name)
     player
   end
 
