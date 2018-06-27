@@ -54,14 +54,14 @@ class Game extends React.Component {
             {robotPlayerNames.map(
               (name, index) => {
                 return (
-                  <RobotPlayer playerTurn={this.state.playerTurn} playerClicked={this.playerClicked.bind(this)} robotBooks={this.state.robotBooks} key={`RobotPlayer${index + 1}`} name={name} index={index}/>
+                  <RobotPlayer playerTarget={this.state.playerTarget} playerTurn={this.state.playerTurn} playerClicked={this.playerClicked.bind(this)} robotBooks={this.state.robotBooks} key={`RobotPlayer${index + 1}`} name={name} index={index}/>
                 )
               })
             }
           </div>
           <Deck/>
           {/* Pass in the card clicked rank through params and change the class depending on the*/ }
-          <HumanPlayer cardTarget={this.state.cardTarget} clearData={this.clearData.bind(this)} cardClicked={this.cardClicked.bind(this)} name={humanPlayerName} books={this.state.playerBooks} playerTurn={this.state.playerTurn} cards={this.state.playerCards}/>
+          <HumanPlayer playerTarget={this.state.playerTarget} cardTarget={this.state.cardTarget} clearData={this.clearData.bind(this)} cardClicked={this.cardClicked.bind(this)} name={humanPlayerName} books={this.state.playerBooks} playerTurn={this.state.playerTurn} cards={this.state.playerCards}/>
         </div>
       );
     }else {

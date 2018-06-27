@@ -19,6 +19,13 @@ body {
   margin: 6px;
 }
 
+.request_card{
+  margin-top: 10px;
+  width: 100px;
+  height: 35px;
+  font-size: 13px;
+}
+
 .highlighted {
     border: 2px solid #ffdf00;
     border-radius: 7px;

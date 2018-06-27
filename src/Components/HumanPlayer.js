@@ -11,6 +11,17 @@ class HumanPlayer extends React.Component {
     return new_card;
   }
 
+  selected(){
+    if(this.props.cardTarget !== '' && this.props.playerTarget !== ''){
+      return (
+        <form>
+          <input className='request_card' type='submit' value="Request Card"/>
+          {/*Add a fetch to the server to actually play a round here*/}
+        </form>
+      )
+    }
+  }
+
   correctRank(card, cardRank, index){
     if (cardRank === this.props.cardTarget){
       return (
@@ -33,6 +44,7 @@ class HumanPlayer extends React.Component {
           <h5 className='text'>Click on a card in your hand and then click on a player to ask for that card.</h5>
           <h5 className='text'>If they have that card, you will take that card and you will get another turn.</h5>
           <h5 className='text'>Otherwise, you will go fishing and your turn will end.</h5>
+          {this.selected()}
           <h2>{this.props.name}</h2>
           {cards.map((card, index) => {
               return (
