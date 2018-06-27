@@ -10,7 +10,9 @@ class Game extends React.Component {
     this.state = {
       names: '',
       playerTurn: 0,
-      playerCards: ''
+      playerCards: [],
+      robotBooks: [],
+      playerBooks: []
     }
   }
 
@@ -19,8 +21,10 @@ class Game extends React.Component {
       method: 'GET'
     }).then(data => data.json()).then((data) => {
       this.setState({names: data['names']})
-       this.setState({playerTurn: data['player_turn']})
-       this.setState({playerCards: data['player_cards']})
+       this.setState({playerTurn: data['player_turn']});
+       this.setState({playerCards: data['player_cards']});
+       this.setState({robotBooks: data['robot_books']});
+       this.setState({playerBooks: data['player_books']});
     })
   }
 
@@ -33,15 +37,15 @@ class Game extends React.Component {
         <div>
           <div className='holder'>
             {robotPlayerNames.map(
-              function(name, index) {
+              (name, index) => {
                 return (
-                  <RobotPlayer key={`RobotPlayer${index + 1}`} name={name} index={index}/>
+                  <RobotPlayer robotBooks={this.state.robotBooks} key={`RobotPlayer${index + 1}`} name={name} index={index}/>
                 )
               })
             }
           </div>
           <Deck/>
-          <HumanPlayer name={humanPlayerName} yourTurn={false} cards={this.state.playerCards}/>
+          <HumanPlayer name={humanPlayerName} books={this.state.playerBooks} playerTurn={this.state.playerTurn} cards={this.state.playerCards}/>
         </div>
       );
     }else {

@@ -32,9 +32,17 @@ class Server < Sinatra::Base
 
   get('/game') do
     # Fix broken encapsulation
+    player = $game.players.values[0]
+    robot_books = []
+    $game.players.values.delete(player)
+    $game.players.values.each do |robot_player|
+      robot_books.push(robot_player.pairs)
+    end
     hash = {names: $game.names,
             player_turn: $game.player_turn,
-            player_cards: $game.players.values[0].deck.cards}
+            player_cards: player.convert_hand, # Gets the first player's cards and converts them into s7 and d2 format.
+            player_books: player.pairs,
+            robot_books: robot_books}
     json hash
   end
 end
