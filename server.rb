@@ -34,7 +34,7 @@ class Server < Sinatra::Base
     # Fix broken encapsulation
     hash = {names: $game.names,
             player_turn: $game.player_turn,
-            player_cards: [$game.players.values[0].deck.cards]}
+            player_cards: $game.players.values[0].deck.cards}
     json hash
   end
 end

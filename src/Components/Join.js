@@ -1,7 +1,7 @@
 import React from 'react';
-import './App.css';
+import '../App.css';
 
-class Players extends React.Component {
+class Join extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: ''};
@@ -15,21 +15,21 @@ class Players extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch('/players', {
+    fetch('/join', {
       method: 'POST',
       body: JSON.stringify({
-        number: this.state.value
+        name: this.state.value
       })
-    }).then(response => this.props.updateState("Game"))
+    }).then(data => this.props.updateState("Players"));
   }
 
   render() {
     return (
       <div className='wrapper'>
-        <h1>Welcome to Go Fish!</h1>
+        <h1> Welcome to Go Fish!</h1>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <h3>How many players would you like to player with?(Max of 8)</h3>
-          <input name="name" type="number" min='3' max='8' required="" value={this.state.value} onChange={this.handleChange.bind(this)}/>
+          <h3> Type in your name:</h3>
+          <input name="name" type="text" required="" value={this.state.value} onChange={this.handleChange.bind(this)}/>
           <input type='submit' value='Submit'/>
         </form>
       </div>
@@ -37,4 +37,4 @@ class Players extends React.Component {
   }
 }
 
-export default Players;
+export default Join;

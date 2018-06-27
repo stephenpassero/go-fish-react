@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import '../App.css';
 import Join from './Join.js'
 import Game from './Game.js'
 import Players from './Players.js'
