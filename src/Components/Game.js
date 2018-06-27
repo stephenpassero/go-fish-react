@@ -12,7 +12,9 @@ class Game extends React.Component {
       playerTurn: 0,
       playerCards: [],
       robotBooks: [],
-      playerBooks: []
+      playerBooks: [],
+      cardTarget: '',
+      playerTarget: ''
     }
   }
 
@@ -28,6 +30,19 @@ class Game extends React.Component {
     })
   }
 
+  clearData(){
+    this.setState({cardTarget: ''})
+    this.setState({playerTarget: ''})
+  }
+
+  cardClicked(card_rank){
+    this.setState({cardTarget: card_rank})
+  }
+
+  playerClicked(player){
+    this.setState({playerTarget: player})
+  }
+
   render() {
     if(this.state.names.length > 0){
       const robotPlayerNames = this.state.names.slice(0)
@@ -39,13 +54,14 @@ class Game extends React.Component {
             {robotPlayerNames.map(
               (name, index) => {
                 return (
-                  <RobotPlayer robotBooks={this.state.robotBooks} key={`RobotPlayer${index + 1}`} name={name} index={index}/>
+                  <RobotPlayer playerTurn={this.state.playerTurn} playerClicked={this.playerClicked.bind(this)} robotBooks={this.state.robotBooks} key={`RobotPlayer${index + 1}`} name={name} index={index}/>
                 )
               })
             }
           </div>
           <Deck/>
-          <HumanPlayer name={humanPlayerName} books={this.state.playerBooks} playerTurn={this.state.playerTurn} cards={this.state.playerCards}/>
+          {/* Pass in the card clicked rank through params and change the class depending on the*/ }
+          <HumanPlayer cardTarget={this.state.cardTarget} clearData={this.clearData.bind(this)} cardClicked={this.cardClicked.bind(this)} name={humanPlayerName} books={this.state.playerBooks} playerTurn={this.state.playerTurn} cards={this.state.playerCards}/>
         </div>
       );
     }else {

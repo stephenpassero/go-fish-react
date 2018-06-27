@@ -10,6 +10,20 @@ body {
   flex-direction: row;
 }
 
+.submit_button{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+}
+
+.text{
+  margin: 6px;
+}
+
+.highlighted {
+    border: 2px solid #ffdf00;
+    border-radius: 7px;
+}
+
 .playing_space{
   margin-top: 40px;
   margin-bottom: 40px;
