@@ -19,14 +19,24 @@ class Player
     @score = num
   end
 
-  def convert_hand()
+  def convert_hand(arr_of_cards=nil)
     cards = []
-    deck.cards.each do |card_obj|
-      card_str = ("#{card_obj.suit[0, 1].downcase}#{card_obj.rank.to_s.downcase}")
-      if card_str[-1] == "1"
-        card_str.insert(2, '0')
+    if arr_of_cards != nil && arr_of_cards != []
+      arr_of_cards.each do |card|
+        card_str = ("#{card.suit[0, 1].downcase}#{card.rank.to_s.downcase}")
+        if card_str[-1] == "1"
+          card_str.insert(2, '0')
+        end
+        cards.push(card_str)
       end
-      cards.push(card_str)
+    elsif arr_of_cards == nil
+      deck.cards.each do |card_obj|
+        card_str = ("#{card_obj.suit[0, 1].downcase}#{card_obj.rank.to_s.downcase}")
+        if card_str[-1] == "1"
+          card_str.insert(2, '0')
+        end
+        cards.push(card_str)
+      end
     end
     return cards
   end

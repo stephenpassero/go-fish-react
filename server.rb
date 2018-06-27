@@ -5,11 +5,24 @@ require 'json'
 require 'sinatra/json'
 require './lib/game'
 require './lib/request'
+require './lib/response'
 
 $player_name = ""
 class Server < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
+  end
+
+  def self.run_bot_turn(bot_name)
+    bot = $game.find_player(bot_name)
+    bot_cards = bot.deck.cards()
+    card_to_ask = bot_cards[rand(bot_cards.length) - 1].rank
+    names = $game.names.reject{|key| key == bot_name}
+    player_to_ask = names[rand(names.length) - 1]
+    request = Request.new(bot_name, card_to_ask, player_to_ask)
+    response = $game.run_round(request.to_json)
+    correct_response = Response.from_json(response)
+    # Will eventually need to make a game log and use the response to put text in there
   end
 
   post('/join') do
@@ -18,7 +31,6 @@ class Server < Sinatra::Base
   end
 
   get('/app') do
-    hash = ''
     if $game
       hash = {game: true}
     else
@@ -51,17 +63,24 @@ class Server < Sinatra::Base
     target_name = json_obj['player']
     request = Request.new($player.name, card_rank, target_name)
     response = $game.run_round(request.to_json)
+    correct_response = Response.from_json(response)
     # Will eventually need to make a game log and use the response to put text in there
-    response
+    until $game.player_turn == 1 do
+      self.class.run_bot_turn($game.names[$game.player_turn - 1])
+    end
+    hash = {status: 200}
+    json hash
   end
 
   get('/game') do
     # Fix broken encapsulation
     $player = $game.players.values[0]
     robot_books = []
-    $game.players.values.delete($player)
+    robots = $game.players.reject{|key| key == $player}
     $game.players.values.each do |robot_player|
-      robot_books.push(robot_player.pairs)
+      if robot_player != $player
+        robot_books.push(robot_player.convert_hand(robot_player.pairs))
+      end
     end
     hash = {names: $game.names,
             player_turn: $game.player_turn,

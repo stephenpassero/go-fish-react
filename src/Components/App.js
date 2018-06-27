@@ -20,7 +20,7 @@ class App extends Component {
     fetch('/app', {
       method: 'GET'
     }).then(data => data.json()).then((data) => {
-      if(data['game'] == true){
+      if(data['game'] === true){
         this.setState({componentToRender: 'Game'})
       }
     })
