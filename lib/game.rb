@@ -64,7 +64,7 @@ class Game
       if target.cards_left == 0
         refill_cards(target)
       end
-      return Response.new(original_fisher, card_rank, original_target, card)
+      return Response.new(original_fisher, card_rank, original_target, card).to_json
     end
   end
 

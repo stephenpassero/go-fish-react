@@ -29,7 +29,7 @@ class Players extends React.Component {
         <h1>Welcome to Go Fish!</h1>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <h3>How many players would you like to player with?(Max of 8)</h3>
-          <input name="name" type="number" min='3' max='8' required="" value={this.state.value} onChange={this.handleChange.bind(this)}/>
+          <input name="numOfPlayers" type="number" min='3' max='8' required="" value={this.state.value} onChange={this.handleChange.bind(this)}/>
           <input type='submit' value='Submit'/>
         </form>
       </div>

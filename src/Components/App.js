@@ -16,6 +16,16 @@ class App extends Component {
     this.setState({componentToRender: str});
   }
 
+  componentDidMount(){
+    fetch('/app', {
+      method: 'GET'
+    }).then(data => data.json()).then((data) => {
+      if(data['game'] == true){
+        this.setState({componentToRender: 'Game'})
+      }
+    })
+  }
+
   render() {
     if (this.state.componentToRender === "Join"){
       return (
@@ -32,7 +42,7 @@ class App extends Component {
     }else if (this.state.componentToRender === "Game") {
       return (
         <div>
-          <Game/>
+          <Game updateState={this.updateState.bind(this)}/>
         </div>
       );
     }

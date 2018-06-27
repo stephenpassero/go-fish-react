@@ -16,17 +16,20 @@ Capybara.configure do |config|
 end
 
 RSpec.describe Server, type: :feature do
+  it 'can go to the number of players page' do
+    visit '/'
+    fill_in('name', :with => "Player1")
+    click_on('Submit')
+    expect(page).to have_content("(Max of 8)")
+  end
+
   it 'can go to the game page' do
     visit '/'
     fill_in('name', :with => "Player1")
     click_on('Submit')
-    expect(page).to have_content("Player1")
+    fill_in('numOfPlayers', :with => "7")
+    click_on('Submit')
+    expect(page).to have_content("Player7")
   end
-  # describe "POST /join" do
-  #   it 'returns a dealt game' do
-  #     post '/join', {name: 'Stephen', player_count: 3}.to_json, {"Content-Type" => 'application/json'}
-  #     json = JSON.parse(last_response.body)
-  #     expect(json['players'].count).to eq 3
-  #   end
-  # end
+
 end
