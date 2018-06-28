@@ -16,13 +16,17 @@ class Server < Sinatra::Base
   def self.run_bot_turn(bot_name)
     bot = $game.find_player(bot_name)
     bot_cards = bot.deck.cards()
-    card_to_ask = bot_cards[rand(bot_cards.length) - 1].rank
-    names = $game.names.reject{|key| key == bot_name}
-    player_to_ask = names[rand(names.length) - 1]
-    request = Request.new(bot_name, card_to_ask, player_to_ask)
-    response = $game.run_round(request.to_json)
-    correct_response = Response.from_json(response)
-    # Will eventually need to make a game log and use the response to put text in there
+    if bot.cards_left == 0
+      return $game.increment_player_turn()
+    else
+      card_to_ask = bot_cards[rand(bot_cards.length) - 1].rank
+      names = $game.names.reject{|key| key == bot_name}
+      player_to_ask = names[rand(names.length) - 1]
+      request = Request.new(bot_name, card_to_ask, player_to_ask)
+      response = $game.run_round(request.to_json)
+      correct_response = Response.from_json(response)
+      # Will eventually need to make a game log and use the response to put text in there
+    end
   end
 
   post('/join') do
@@ -57,16 +61,20 @@ class Server < Sinatra::Base
   post('/human_player') do
     json_obj = JSON.parse(request.body.read)
     card_rank = json_obj['card_rank']
-    if card_rank.to_i != 0 # Checks if the card isn't a face card
-      card_rank = card_rank.to_i
-    end
-    target_name = json_obj['player']
-    request = Request.new($player.name, card_rank, target_name)
-    response = $game.run_round(request.to_json)
-    correct_response = Response.from_json(response)
-    # Will eventually need to make a game log and use the response to put text in there
-    until $game.player_turn == 1 do
-      self.class.run_bot_turn($game.names[$game.player_turn - 1])
+    if card_rank == ''
+      $game.increment_player_turn()
+    else
+      if card_rank.to_i != 0 # Checks if the card isn't a face card
+        card_rank = card_rank.to_i
+      end
+      target_name = json_obj['player']
+      request = Request.new($player.name, card_rank, target_name)
+      response = $game.run_round(request.to_json)
+      correct_response = Response.from_json(response)
+      # Will eventually need to make a game log and use the response to put text in there
+      until $game.player_turn == 1
+        self.class.run_bot_turn($game.names[$game.player_turn - 1])
+      end
     end
     hash = {status: 200}
     json hash
@@ -85,8 +93,9 @@ class Server < Sinatra::Base
     hash = {names: $game.names,
             player_turn: $game.player_turn,
             player_cards: $player.convert_hand, # Gets the first player's cards and converts them into s7 and d2 format.
-            player_books: $player.pairs,
-            robot_books: robot_books}
+            player_books: $player.convert_hand($player.pairs),
+            robot_books: robot_books,
+            cards_left_in_deck: $game.cards_in_deck()}
     json hash
   end
 end

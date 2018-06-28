@@ -36,36 +36,31 @@ class Game
 
   def run_round(request)
     new_request = Request.from_json(request)
-    if new_request.rank == ""
-      increment_player_turn()
-      return ""
+    original_fisher = new_request.fisher.downcase
+    original_target = new_request.target.downcase
+    #Find the actual player objects
+    fisher = players[new_request.fisher.downcase]
+    target = players[new_request.target.downcase]
+    card_rank = new_request.rank
+    if card_rank.to_i == 0 # Checks if the card is a face card
+      card = fisher.request_card(fisher, card_rank, target)
     else
-      original_fisher = new_request.fisher.downcase
-      original_target = new_request.target.downcase
-      #Find the actual player objects
-      fisher = players[new_request.fisher.downcase]
-      target = players[new_request.target.downcase]
-      card_rank = new_request.rank
-      if card_rank.to_i == 0 # Checks if the card is a face card
-        card = fisher.request_card(fisher, card_rank, target)
-      else
-        card = fisher.request_card(fisher, card_rank.to_i, target)
-      end
-      if card == false
-        if deck.cards_left >= 1
-          fisher.add_to_hand([deck.play_top_card()])
-        end
-        increment_player_turn()
-      end
-      fisher.pair_cards()
-      if fisher.cards_left == 0
-        refill_cards(fisher)
-      end
-      if target.cards_left == 0
-        refill_cards(target)
-      end
-      return Response.new(original_fisher, card_rank, original_target, card).to_json
+      card = fisher.request_card(fisher, card_rank.to_i, target)
     end
+    if card == false
+      if deck.cards_left >= 1
+        fisher.add_to_hand([deck.play_top_card()])
+      end
+      increment_player_turn()
+    end
+    fisher.pair_cards()
+    if fisher.cards_left == 0
+      refill_cards(fisher)
+    end
+    if target.cards_left == 0
+      refill_cards(target)
+    end
+    return Response.new(original_fisher, card_rank, original_target, card).to_json
   end
 
   def start_game()
@@ -86,6 +81,10 @@ class Game
   def refill_cards(player)
     if deck.cards_left >= 5
       5.times do
+        player.add_to_hand([deck.play_top_card])
+      end
+    elsif deck.cards_left < 5
+      deck.cards_left.times do
         player.add_to_hand([deck.play_top_card])
       end
     end

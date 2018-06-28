@@ -14,7 +14,8 @@ class Game extends React.Component {
       robotBooks: [],
       playerBooks: [],
       cardTarget: '',
-      playerTarget: ''
+      playerTarget: '',
+      cardsLeftInDeck: ''
     }
   }
 
@@ -27,6 +28,7 @@ class Game extends React.Component {
        this.setState({playerCards: data['player_cards']});
        this.setState({robotBooks: data['robot_books']});
        this.setState({playerBooks: data['player_books']});
+       this.setState({cardsLeftInDeck: data['cards_left_in_deck']});
     })
   }
 
@@ -59,11 +61,10 @@ class Game extends React.Component {
               })
             }
           </div>
-          <Deck/>
+          <Deck cardsLeftInDeck={this.state.cardsLeftInDeck}/>
           {/* Pass in the card clicked rank through params and change the class depending on the*/ }
           <HumanPlayer playerTarget={this.state.playerTarget}
                         cardTarget={this.state.cardTarget}
-                        clearData={this.clearData.bind(this)}
                         cardClicked={this.cardClicked.bind(this)}
                         name={humanPlayerName}
                         books={this.state.playerBooks}
