@@ -14,13 +14,11 @@ class Server < Sinatra::Base
     register Sinatra::Reloader
   end
 
-
-
   def self.run_bot_turn(bot_name)
     bot = $game.find_player(bot_name)
     bot_cards = bot.deck.cards()
-    if bot.cards_left == 0
-      return $game.increment_player_turn()
+    if bot.cards_left < 1
+      $game.increment_player_turn()
     else
       card_to_ask = bot_cards[rand(bot_cards.length) - 1].rank
       names = $game.names.reject{|key| key == bot_name}
@@ -29,9 +27,9 @@ class Server < Sinatra::Base
       response = $game.run_round(request.to_json)
       correct_response = Response.from_json(response)
       if correct_response.card == false
-        $responses.push("#{correct_response.fisher.capitalize} asked #{correct_response.target.capitalize} for a #{correct_response.rank} and went fishing...")
+        $responses.push("#{correct_response.fisher.capitalize} asked #{correct_response.target.capitalize} for all his #{correct_response.rank} and went fishing...")
       else
-        $responses.push("#{correct_response.fisher.capitalize} took a #{correct_response.rank} from #{correct_response.target.capitalize}.")
+        $responses.push("#{correct_response.fisher.capitalize} took all #{correct_response.rank} from #{correct_response.target.capitalize}.")
       end
       if $responses.length > 10
         $responses.shift()
@@ -45,8 +43,8 @@ class Server < Sinatra::Base
   end
 
   get('/app') do
-    if $game.cards_left_in_play?() == false
-      hash = {game: 'end_game'}
+    if $game && $game.cards_left_in_play?() == false
+      hash = {game: 'end'}
     elsif $game
       hash = {game: true}
     else
@@ -70,11 +68,15 @@ class Server < Sinatra::Base
     json json_obj
   end
 
-  post('/human_player') do
+  post('/request_card') do
     json_obj = JSON.parse(request.body.read)
     card_rank = json_obj['card_rank']
+    card_rank.capitalize!()
     if card_rank == ''
       $game.increment_player_turn()
+      until $game.player_turn == 1 # Do this until it is the human player's turn
+        self.class.run_bot_turn($game.names[$game.player_turn - 1])
+      end
     else
       if card_rank.to_i != 0 # Checks if the card isn't a face card
         card_rank = card_rank.to_i
@@ -84,14 +86,14 @@ class Server < Sinatra::Base
       response = $game.run_round(request.to_json)
       correct_response = Response.from_json(response)
       if correct_response.card == false
-        $responses.push("#{correct_response.fisher.capitalize} asked #{correct_response.target.capitalize} for a #{correct_response.rank.capitalize} and went fishing...")
+        $responses.push("#{correct_response.fisher.capitalize} asked #{correct_response.target.capitalize} for all his #{correct_response.rank} and went fishing...")
       else
-        $responses.push("#{correct_response.fisher.capitalize} took a #{correct_response.rank} from #{correct_response.target.capitalize}.")
+        $responses.push("#{correct_response.fisher.capitalize} took all #{correct_response.rank} from #{correct_response.target.capitalize}.")
       end
       if $responses.length > 10
         $responses.shift()
       end
-      until $game.player_turn == 1
+      until $game.player_turn == 1 # Do this until it is the human player's turn
         self.class.run_bot_turn($game.names[$game.player_turn - 1])
       end
     end

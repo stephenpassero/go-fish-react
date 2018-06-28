@@ -11,18 +11,21 @@ class HumanPlayer extends React.Component {
     return new_card;
   }
 
-  handleSubmit(){
-    fetch('/human_player', {
+  handleSubmit(event){
+    event.preventDefault();
+    fetch('/request_card', {
       method: 'POST',
       body: JSON.stringify({
         card_rank: this.props.cardTarget,
         player: this.props.playerTarget
       })
+    }).then(data => {
+      this.props.updateState("GameIsReady");
+      this.props.updateGameState();
     })
   }
 
   renderCorrectButton(){
-    console.log(this.props.cards)
     if(this.props.cardTarget !== '' && this.props.playerTarget !== ''){
       return (
         <form onSubmit={this.handleSubmit.bind(this)}>
@@ -54,7 +57,9 @@ class HumanPlayer extends React.Component {
   }
 
   render() {
-    if(this.props.playerTurn === 1 && Array.isArray(this.props.cards)){ // Checks if cards is actually an array and if it is your turn
+    const cards = this.props.cards
+    console.log(cards)
+    if(this.props.playerTurn === 1 && Array.isArray(cards)){ // Checks if cards is actually an array and if it is your turn
       return (
         <div className='human_player'>
           <h3>{`It's your turn!`}</h3>
@@ -63,7 +68,7 @@ class HumanPlayer extends React.Component {
           <h5 className='text'>Otherwise, you will go fishing and your turn will end.</h5>
           {this.renderCorrectButton()}
           <h2>{this.props.name}</h2>
-          {this.props.cards.map((card, index) => {
+          {cards.map((card, index) => {
               return (
                 this.renderCorrectCard(card, this.getRank(card), index)
               )
@@ -71,7 +76,6 @@ class HumanPlayer extends React.Component {
           }
           <br/>
           {this.props.books.map((card, index) => {
-            console.log(card)
             return (
               <img className='set_card' key={`img${index + 1}`} src={`cards/${card}.png`} alt={"One of your books"}/>
             )
@@ -79,11 +83,11 @@ class HumanPlayer extends React.Component {
           }
         </div>
       )
-    }else if(Array.isArray(this.props.cards)){
+    }else if(Array.isArray(cards)){
       return (
         <div className='human_player'>
           <h2>{this.props.name}</h2>
-          {this.props.cards.map((card, index) => {
+          {cards.map((card, index) => {
               return (
                 <img key={`img${index + 1}`} src={`cards/${card}.png`} alt="Card in your hand"/>
               )

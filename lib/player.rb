@@ -41,8 +41,8 @@ class Player
     return cards
   end
 
-  def remove_card(card)
-    deck.delete(card)
+  def remove_cards(card_rank)
+    deck.remove_cards(card_rank)
   end
 
   def set_deck(arr_of_cards)
@@ -91,13 +91,12 @@ class Player
     end
   end
 
-  def request_card(player, card_rank, target)
-    card = target.card_in_hand(card_rank)
-    if card
-      target.remove_card(card)
-      player.add_to_hand([card])
-      return card
+  def request_cards(player, card_rank, target)
+    cards = target.remove_cards(card_rank)
+    if cards != []
+      player.add_to_hand(cards)
+      return cards
     end
-    return false
+    return [false]
   end
 end

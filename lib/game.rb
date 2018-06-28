@@ -43,11 +43,11 @@ class Game
     target = players[new_request.target.downcase]
     card_rank = new_request.rank
     if card_rank.to_i == 0 # Checks if the card is a face card
-      card = fisher.request_card(fisher, card_rank, target)
+      cards = fisher.request_cards(fisher, card_rank, target)
     else
-      card = fisher.request_card(fisher, card_rank.to_i, target)
+      cards = fisher.request_cards(fisher, card_rank.to_i, target)
     end
-    if card == false
+    if cards == [false]
       if deck.cards_left >= 1
         fisher.add_to_hand([deck.play_top_card()])
       end
@@ -60,7 +60,8 @@ class Game
     if target.cards_left == 0
       refill_cards(target)
     end
-    return Response.new(original_fisher, card_rank, original_target, card).to_json
+
+    return Response.new(original_fisher, card_rank, original_target, cards[0]).to_json
   end
 
   def start_game()

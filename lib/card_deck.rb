@@ -23,6 +23,17 @@ class CardDeck
     cards.delete(card)
   end
 
+  def remove_cards(card_rank)
+    matching_cards = []
+    cards.each do |card|
+      if card.rank == card_rank
+        matching_cards.push(card)
+        cards.delete(card)
+      end
+    end
+    matching_cards
+  end
+
   def add(cards_to_add)
     cards_to_add.each do |card|
       cards.push(card)

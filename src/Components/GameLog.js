@@ -3,7 +3,7 @@ import '../App.css';
 
 class GameLog extends React.Component {
   render() {
-    if(this.props.responses !== undefined){
+    if(this.props.responses !== ''){
       return (
         <div className='history'>
           {this.props.responses.map((response, index) => {

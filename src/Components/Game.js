@@ -16,7 +16,8 @@ class Game extends React.Component {
       playerBooks: [],
       cardTarget: '',
       playerTarget: '',
-      cardsLeftInDeck: ''
+      cardsLeftInDeck: '',
+      responses: ''
     }
   }
 
@@ -34,9 +35,20 @@ class Game extends React.Component {
     })
   }
 
-  clearData(){
-    this.setState({cardTarget: ''})
-    this.setState({playerTarget: ''})
+  updateGameState(){
+    fetch('/game', {
+      method: 'GET'
+    }).then(data => data.json()).then((data) => {
+      this.setState({names: data['names']})
+       this.setState({playerTurn: data['player_turn']});
+       this.setState({playerCards: data['player_cards']});
+       this.setState({robotBooks: data['robot_books']});
+       this.setState({playerBooks: data['player_books']});
+       this.setState({cardsLeftInDeck: data['cards_left_in_deck']});
+       this.setState({responses: data['responses']});
+       this.setState({cardTarget: ''})
+       this.setState({playerTarget: ''})
+    })
   }
 
   cardClicked(card_rank){
@@ -73,6 +85,7 @@ class Game extends React.Component {
                         playerTurn={this.state.playerTurn}
                         cards={this.state.playerCards}
                         updateState={this.props.updateState.bind(this)}
+                        updateGameState={this.updateGameState.bind(this)}
           />
           <GameLog responses={this.state.responses}/>
         </div>
