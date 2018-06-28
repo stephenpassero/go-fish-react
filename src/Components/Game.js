@@ -3,6 +3,7 @@ import '../App.css';
 import RobotPlayer from './RobotPlayer.js'
 import Deck from './Deck.js'
 import HumanPlayer from './HumanPlayer.js'
+import GameLog from './GameLog.js'
 
 class Game extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class Game extends React.Component {
        this.setState({robotBooks: data['robot_books']});
        this.setState({playerBooks: data['player_books']});
        this.setState({cardsLeftInDeck: data['cards_left_in_deck']});
+       this.setState({responses: data['responses']});
     })
   }
 
@@ -70,7 +72,9 @@ class Game extends React.Component {
                         books={this.state.playerBooks}
                         playerTurn={this.state.playerTurn}
                         cards={this.state.playerCards}
-                        updateState={this.props.updateState.bind(this)}/>
+                        updateState={this.props.updateState.bind(this)}
+          />
+          <GameLog responses={this.state.responses}/>
         </div>
       );
     }else {

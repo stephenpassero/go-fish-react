@@ -11,7 +11,7 @@ class Deck extends React.Component {
           <img className="deck_card" src='cards/backs_red.png' alt="Red Card Back"/>
           <img className="deck_card" src='cards/backs_red.png' alt="Red Card Back"/>
           <img className="deck_card" src='cards/backs_red.png' alt="Red Card Back"/>
-          </div>
+        </div>
       )
     }else {
       return (

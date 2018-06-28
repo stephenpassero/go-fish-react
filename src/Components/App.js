@@ -5,7 +5,6 @@ import Game from './Game.js'
 import Players from './Players.js'
 
 class App extends Component {
-
   constructor(){
     super()
     this.state = {componentToRender: "Join"}

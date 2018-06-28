@@ -8,10 +8,13 @@ require './lib/request'
 require './lib/response'
 
 $player_name = ""
+$responses = []
 class Server < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
+
+
 
   def self.run_bot_turn(bot_name)
     bot = $game.find_player(bot_name)
@@ -25,7 +28,14 @@ class Server < Sinatra::Base
       request = Request.new(bot_name, card_to_ask, player_to_ask)
       response = $game.run_round(request.to_json)
       correct_response = Response.from_json(response)
-      # Will eventually need to make a game log and use the response to put text in there
+      if correct_response.card == false
+        $responses.push("#{correct_response.fisher.capitalize} asked #{correct_response.target.capitalize} for a #{correct_response.rank} and went fishing...")
+      else
+        $responses.push("#{correct_response.fisher.capitalize} took a #{correct_response.rank} from #{correct_response.target.capitalize}.")
+      end
+      if $responses.length > 10
+        $responses.shift()
+      end
     end
   end
 
@@ -35,7 +45,9 @@ class Server < Sinatra::Base
   end
 
   get('/app') do
-    if $game
+    if $game.cards_left_in_play?() == false
+      hash = {game: 'end_game'}
+    elsif $game
       hash = {game: true}
     else
       hash = {game: false}
@@ -71,7 +83,14 @@ class Server < Sinatra::Base
       request = Request.new($player.name, card_rank, target_name)
       response = $game.run_round(request.to_json)
       correct_response = Response.from_json(response)
-      # Will eventually need to make a game log and use the response to put text in there
+      if correct_response.card == false
+        $responses.push("#{correct_response.fisher.capitalize} asked #{correct_response.target.capitalize} for a #{correct_response.rank.capitalize} and went fishing...")
+      else
+        $responses.push("#{correct_response.fisher.capitalize} took a #{correct_response.rank} from #{correct_response.target.capitalize}.")
+      end
+      if $responses.length > 10
+        $responses.shift()
+      end
       until $game.player_turn == 1
         self.class.run_bot_turn($game.names[$game.player_turn - 1])
       end
@@ -95,7 +114,8 @@ class Server < Sinatra::Base
             player_cards: $player.convert_hand, # Gets the first player's cards and converts them into s7 and d2 format.
             player_books: $player.convert_hand($player.pairs),
             robot_books: robot_books,
-            cards_left_in_deck: $game.cards_in_deck()}
+            cards_left_in_deck: $game.cards_in_deck(),
+            responses: $responses}
     json hash
   end
 end
