@@ -43,9 +43,7 @@ class Server < Sinatra::Base
   end
 
   get('/app') do
-    if $game && $game.cards_left_in_play?() == false
-      hash = {game: 'end'}
-    elsif $game
+    if $game
       hash = {game: true}
     else
       hash = {game: false}
@@ -97,7 +95,20 @@ class Server < Sinatra::Base
         self.class.run_bot_turn($game.names[$game.player_turn - 1])
       end
     end
-    hash = {status: 200}
+    if $game.cards_left_in_play?() == true
+      hash = {page: 'Game_is_ready'}
+    elsif $game.cards_left_in_play?() == false
+      hash = {page: 'EndGame'}
+    end
+    json hash
+  end
+
+  get('/end_game') do
+    hash = {}
+    $game.players.values.each do |player|
+      hash[player.score] = player.name
+    end
+    $game = nil
     json hash
   end
 

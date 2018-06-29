@@ -22,10 +22,8 @@ class App extends Component {
     .then((data) => {
       if(data['game'] === true){
         this.setState({componentToRender: 'Game'})
-      }else if(data['game'] == false){
+      }else if(data['game'] === false){
         this.setState({componentToRender: 'Join'})
-      }else{
-        this.setState({componentToRender: 'EndGame'})
       }
     })
   }

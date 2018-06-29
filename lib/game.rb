@@ -38,7 +38,7 @@ class Game
     new_request = Request.from_json(request)
     original_fisher = new_request.fisher.downcase
     original_target = new_request.target.downcase
-    #Find the actual player objects
+    # Find the actual player objects
     fisher = players[new_request.fisher.downcase]
     target = players[new_request.target.downcase]
     card_rank = new_request.rank

@@ -19,8 +19,8 @@ class HumanPlayer extends React.Component {
         card_rank: this.props.cardTarget,
         player: this.props.playerTarget
       })
-    }).then(data => {
-      this.props.updateState("GameIsReady");
+    }).then(data => data.json()).then(data => {
+      this.props.updateState(data['page']);
       this.props.updateGameState();
     })
   }
@@ -58,7 +58,6 @@ class HumanPlayer extends React.Component {
 
   render() {
     const cards = this.props.cards
-    console.log(cards)
     if(this.props.playerTurn === 1 && Array.isArray(cards)){ // Checks if cards is actually an array and if it is your turn
       return (
         <div className='human_player'>
