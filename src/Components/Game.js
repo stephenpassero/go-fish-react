@@ -76,7 +76,6 @@ class Game extends React.Component {
             }
           </div>
           <Deck cardsLeftInDeck={this.state.cardsLeftInDeck}/>
-          {/* Pass in the card clicked rank through params and change the class depending on the*/ }
           <HumanPlayer playerTarget={this.state.playerTarget}
                         cardTarget={this.state.cardTarget}
                         cardClicked={this.cardClicked.bind(this)}
