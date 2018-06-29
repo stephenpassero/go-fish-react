@@ -25,11 +25,15 @@ class CardDeck
 
   def remove_cards(card_rank)
     matching_cards = []
+    cards_to_be_deleted = []
     cards.each do |card|
       if card.rank == card_rank
         matching_cards.push(card)
-        cards.delete(card)
+        cards_to_be_deleted.push(card)
       end
+    end
+    cards_to_be_deleted.each do |card|
+      cards.delete(card)
     end
     matching_cards
   end

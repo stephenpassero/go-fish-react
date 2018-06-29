@@ -50,6 +50,7 @@ body {
 
 img {
   margin: 0 7px 0 7px;
+  position: relative;
 }
 
 .set_card {
@@ -87,7 +88,7 @@ input {
   font-size: 15px;
   position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: 25%;
 }
 
 .low_margin {

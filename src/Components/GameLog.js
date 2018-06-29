@@ -6,6 +6,7 @@ class GameLog extends React.Component {
     if(this.props.responses !== ''){
       return (
         <div className='history'>
+        <h2>Game Log:</h2>
           {this.props.responses.map((response, index) => {
             return (
               <h5 className='low_margin' key={`p${index + 1}`}>{response}</h5>

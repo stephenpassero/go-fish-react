@@ -105,10 +105,34 @@ class Server < Sinatra::Base
 
   get('/end_game') do
     hash = {}
+    topPlayers = []
+    highestScore = 0
+    result = ""
     $game.players.values.each do |player|
-      hash[player.score] = player.name
+      if player.score > highestScore
+        topPlayers.clear()
+        topPlayers.push(player.name)
+        highestScore = player.score
+      elsif player.score === highestScore
+        topPlayers.push(player.name)
+      end
     end
+    if topPlayers.length == 1
+      result = "#{topPlayers[0]} won with #{highestScore} points!"
+    else
+      topPlayers.each_with_index do |player_name, index|
+        if index === topPlayers.length - 2
+          result += "#{player_name} and "
+        elsif index === topPlayers.length - 1
+          result += "#{player_name} tied with #{highestScore} points..."
+        else
+          result += "#{player_name} "
+        end
+      end
+    end
+    hash = {result: result}
     $game = nil
+    $responses = []
     json hash
   end
 
