@@ -22,6 +22,9 @@ class EndGame extends React.Component {
       <div className='wrapper'>
         <h1>Game Over!</h1>
         <h2>{this.state.result}</h2>
+        <form onSubmit={() => this.props.updateState("Join")}>
+          <input type='submit' value="Start a new game"/>
+        </form>
       </div>
     )
   }

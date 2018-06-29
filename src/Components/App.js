@@ -44,7 +44,7 @@ class App extends Component {
     }else if (this.state.componentToRender === "EndGame") {
       return (
         <div>
-          <EndGame/>
+          <EndGame updateState={this.updateState.bind(this)}/>
         </div>
       );
     }else{
