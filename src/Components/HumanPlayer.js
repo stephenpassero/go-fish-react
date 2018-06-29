@@ -67,12 +67,14 @@ class HumanPlayer extends React.Component {
           <h5 className='text'>Otherwise, you will go fishing and your turn will end.</h5>
           {this.renderCorrectButton()}
           <h2>{this.props.name}</h2>
-          {cards.map((card, index) => {
-              return (
-                this.renderCorrectCard(card, this.getRank(card), index)
-              )
-            })
-          }
+          <div className="your_cards">
+            {cards.map((card, index) => {
+                return (
+                  this.renderCorrectCard(card, this.getRank(card), index)
+                )
+              })
+            }
+          </div>
           <br/>
           {this.props.books.map((card, index) => {
             return (

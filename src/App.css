@@ -53,6 +53,11 @@ img {
   position: relative;
 }
 
+.your_cards{
+  margin: 0 7px 0 7px;
+  position: relative;
+}
+
 .set_card {
   position: relative;
   display: inline-block;

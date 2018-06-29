@@ -16,20 +16,16 @@ Capybara.configure do |config|
 end
 
 RSpec.describe Server, type: :feature do
-  it 'can go to the number of players page' do
+  it 'can run a round of the game' do
     visit '/'
-    fill_in('name', :with => "Player1")
+    fill_in('name', :with => "Stephen")
     click_on('Submit')
-    expect(page).to have_content("(Max of 8)")
+    fill_in('numOfPlayers', :with => "5")
+    click_on('Submit')
+    find(".your_cards", match: :first).click
+    find(".player_div", match: :first).click
+    click_on('Request Card')
+    sleep(0.1)
+    expect(page.text).to match(/Stephen \w/)
   end
-
-  it 'can go to the game page' do
-    visit '/'
-    fill_in('name', :with => "Player1")
-    click_on('Submit')
-    fill_in('numOfPlayers', :with => "7")
-    click_on('Submit')
-    expect(page).to have_content("Player7")
-  end
-
 end
