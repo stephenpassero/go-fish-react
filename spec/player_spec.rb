@@ -16,7 +16,7 @@ describe("#player") do
     card4 = Card.new(4, "Spades")
     player1.set_hand(card1, card2)
     player2.set_hand(card3, card4)
-    player2.request_card(player1, 4, player2)
+    player2.request_cards(player1, 4, player2)
     expect(player2.cards_left).to eq(1)
   end
 
